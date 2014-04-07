@@ -14,7 +14,7 @@ class RiriGraph {
 	
 	// Colors
 	private color neutral, very;
-	private color[] colors = new color[3];
+	private PImage background = null;
 	
 	// Graph positions and size
 	private int xPos, yPos, graphWidth, graphHeight, direction;
@@ -48,6 +48,26 @@ class RiriGraph {
 		name = "GRAPH";
 		direction = RIGHT;
 	}
+
+	public RiriGraph(int aX, int aY, int aW, int aH, PImage bgFile, String aName, int aD) {
+		background(0);
+		// Font and text setup
+		bold = loadFont("GothamBold-24.vlw");
+		thin = loadFont("GothamThin-24.vlw");
+		// Image setup
+		background = bgFile;
+		xPos = aX;
+		yPos = aY;
+		graphWidth = aW;
+		graphHeight = aH;
+		markerX = 0;
+		oldX = 0;
+		newX = 0;
+		lastMillis = 0;
+		easing = EASING_STEPS;
+		name = aName;
+		direction = (aD == LEFT || aD == RIGHT) ? aD : RIGHT;
+	}
 	
 	public RiriGraph(int aX, int aY, int aW, int aH, color cN, color cV, String aName, int aD) {
 		background(0);
@@ -70,33 +90,13 @@ class RiriGraph {
 		direction = (aD == LEFT || aD == RIGHT) ? aD : RIGHT;
 	}
 	
-	public RiriGraph(int aX, int aY, int aW, int aH, color[] c, String aName, int aD) {
-		background(0);
-		// Font and text setup
-		bold = loadFont("GothamBold-24.vlw");
-		thin = loadFont("GothamThin-24.vlw");
-		// Variable initialization
-		colors = c;
-		xPos = aX;
-		yPos = aY;
-		graphWidth = aW;
-		graphHeight = aH;
-		markerX = 0;
-		oldX = 0;
-		newX = 0;
-		lastMillis = 0;
-		easing = EASING_STEPS;
-		name = aName;
-		direction = (aD == LEFT || aD == RIGHT) ? aD : RIGHT;	
-	}
-	
 	public void draw() {
 		fill(0,0,0);
 		noStroke();
 		rect(xPos, yPos, graphWidth, graphHeight);
 		// Gradient background
-		if (colors[0] != 0) {
-			gradientRect(xPos, yPos + HEADER_Y+1, graphWidth, graphHeight-HEADER_Y+1, colors, 'y');	
+		if (background != null) {
+			image(background, xPos, yPos + HEADER_Y+1, graphWidth, graphHeight);
 		}
 		else {
 			gradientRect(xPos, yPos + HEADER_Y+1, graphWidth, graphHeight-HEADER_Y+1, neutral, very, 'y');
@@ -188,38 +188,6 @@ class RiriGraph {
 		      	stroke(c);
 		      	line(i, y, i, y+h);
 		    }
-		}
-	}
-	
-	// Draw a rectangular gradient with more than two colors (at equal intervals apart)
-	// Based on: http://processing.org/examples/lineargradient.html
-	private void gradientRect(int x, int y, float w, float h, color[] colors, char axis) {
-		noFill();
-		// Top to bottom gradient
-		if (axis == 'x') {
-			for (int i = 0; i < colors.length-1; i++) {
-				int start = (int) (y + (y+h) * i);
-				int end = (int) (y + (y+h) * (i+1));
-				for (int j = start; j < end; j++) {
-					float inter = map(j, start, end, 0, 1);
-					color c = lerpColor(colors[i], colors[i+1], inter);
-					stroke(c);
-					line(x, j, x+w, j);	
-				}
-			}
-		}
-		// Left to right gradient
-		else if (axis == 'y') {
-			for (int i = 0; i < colors.length-1; i++) {
-				int start = (int) (x + (x+w) * i);
-				int end = (int) (x + (x+w) * (i+1));	
-				for (int j = start; j < end; j++) {
-					float inter = map(j, start, end, 0, 1);
-					color c = lerpColor(colors[i], colors[i+1], inter);
-					stroke(c);
-					line(y, j, y+w, j);	
-				}
-			}	
 		}
 	}
 	

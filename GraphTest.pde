@@ -16,6 +16,9 @@ boolean playing = true;
 // Graphs
 RiriGraph relax, focus;
 
+// Images 
+PImage bg_focus, bg_relax;
+
 // Setup 
 void setup(){ 
 	// Sketch setup
@@ -30,17 +33,20 @@ void setup(){
 	color veryF = color(255, 34, 184);
 	color[] colors_relax = {neutral, someR, veryR};
 	color[] colors_focus = {veryF, someF, neutral};
+	bg_focus = loadImage("focus_gradient.png");
+	bg_relax = loadImage("relax_gradient.png");
 	// Graph
-	focus = new RiriGraph(0,0,GRAPH_W,HEIGHT,veryF,neutral,"FOCUS",1);
-	//focus = new RiriGraph(0,0,GRAPH_W,HEIGHT,colors_focus,"FOCUS",1);
-	relax = new RiriGraph(WIDTH - GRAPH_W,0,GRAPH_W,HEIGHT,neutral,veryR,"RELAX",0);
-	//relax = new RiriGraph(WIDTH - GRAPH_W,0,GRAPH_W,HEIGHT,colors_relax,"RELAX",0);
+	//focus = new RiriGraph(0,0,GRAPH_W,HEIGHT,veryF,neutral,"FOCUS",1);
+	focus = new RiriGraph(0,0,GRAPH_W,HEIGHT,bg_focus,"FOCUS",1);
+	//relax = new RiriGraph(WIDTH - GRAPH_W,0,GRAPH_W,HEIGHT,neutral,veryR,"RELAX",0);
+	relax = new RiriGraph(WIDTH - GRAPH_W,0,GRAPH_W,HEIGHT,bg_relax,"RELAX",0);
 } 
 
 void draw() {
 	if (playing) {
 		background(0);
 		focus.draw();
+		//image(bg_focus, 0, 0, WIDTH/2, HEIGHT);
 		relax.draw();
 	}	
 }
