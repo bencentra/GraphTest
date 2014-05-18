@@ -16,7 +16,7 @@ void setup() {
 	// Load the background image
 	backgroundImg = loadImage('pathtofile.png');
 	// Create the graph (xPos, yPos, width, height, background, left/right)
-	graph = new RiriGraph(0,0,width,height,backgroundImage,0);
+	graph = new RiriGraph(0,0,width,height,backgroundImg,0);
 }
 
 void draw() {
